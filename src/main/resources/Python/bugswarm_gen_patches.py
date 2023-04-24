@@ -12,7 +12,9 @@ from bugswarm.common.rest_api.database_api import DatabaseAPI
 # OUT_DIR = os.path.expanduser('~/dfs_repos/GitHub_JAVA')
 
 
-logging.basicConfig()
+logging.basicConfig(force=True)
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
 def fake_patches(bps: list, repo_dir: str, lang_suffix: str):
@@ -37,26 +39,26 @@ def fake_patches(bps: list, repo_dir: str, lang_suffix: str):
 def process_repo(repo: str, repo_dir: str, lang_suffix: int, api: DatabaseAPI):
     patch_path = repo_dir + '.patch'
 
-    logging.info(f'{repo}: Pulling refs...')
+    logger.info(f'{repo}: Pulling refs...')
     subprocess.run(['git', 'fetch', 'origin', 'refs/pull/*/head:refs/remotes/origin/pr/*'],
                    cwd=repo_dir, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-    logging.info(f'{repo}: Getting build pairs...')
+    logger.info(f'{repo}: Getting build pairs...')
     bps = api.filter_mined_build_pairs(json.dumps({'repo': repo, 'ci_service': 'github'}))
-    logging.info(f'{repo}: Got {len(bps)} build pairs.')
+    logger.info(f'{repo}: Got {len(bps)} build pairs.')
 
-    logging.info(f'{repo}: Generating patches...')
+    logger.info(f'{repo}: Generating patches...')
     patches = fake_patches(bps, repo_dir, lang_suffix)
-    logging.info(f'{repo}: Generated {len(patches)} patches from {len(bps)} build pairs.')
+    logger.info(f'{repo}: Generated {len(patches)} patches from {len(bps)} build pairs.')
 
-    logging.info(f'{repo}: Writing patch file to {patch_path}...')
+    logger.info(f'{repo}: Writing patch file to {patch_path}...')
     with open(patch_path, 'w') as f:
         chars_written = f.write('\n\n'.join(patches) + '\n')
-    logging.info(f'{repo}: Wrote {chars_written} characters to {patch_path}.')
-    logging.info(f'{repo}: Finished!')
+    logger.info(f'{repo}: Wrote {chars_written} characters to {patch_path}.')
+    logger.info(f'{repo}: Finished!')
 
 
-def main(repo_container_dir: str, lang_suffix: str, num_threads: int):
+def main(repo_container_dir: str, lang_suffix: str):
     # (Repo name; absolute path)
     repos = []
     for dirent in os.scandir(repo_container_dir):
@@ -65,16 +67,15 @@ def main(repo_container_dir: str, lang_suffix: str, num_threads: int):
 
     api = DatabaseAPI(DATABASE_PIPELINE_TOKEN)
 
-    with ThreadPoolExecutor(num_threads) as executor:
+    with ThreadPoolExecutor(4) as executor:
         futures = [executor.submit(process_repo, repo, repo_dir, lang_suffix, api) for repo, repo_dir in repos]
         wait(futures)
 
-    logging.info(f'Processed {len(repos)} repos. Done!')
+    logger.info(f'Processed {len(repos)} repos. Done!')
 
 
-if __name__ == '__main__':
-    sys.exit(main(
-        repo_container_dir=sys.argv[1],
-        lang_suffix=sys.argv[2],
-        num_threads=int(sys.argv[3])
-    ))
+main(
+    repo_container_dir=sys.argv[1],
+    lang_suffix=sys.argv[2],
+    # num_threads=int(sys.argv[3])
+)
