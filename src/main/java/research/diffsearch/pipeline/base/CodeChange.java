@@ -18,6 +18,9 @@ import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 public class CodeChange {
     @SerializedName("c")
     public String commit = "";
+    @SerializedName("cn")
+    public String commitNew = "";
+
     public transient String hunkLines = "";
 
     @SerializedName("o")
@@ -95,10 +98,29 @@ public class CodeChange {
         return this;
     }
 
+    public String getCommitNew() {
+        return commitNew;
+    }
+
+    public CodeChange setCommitNew(String commitNew) {
+        this.commitNew = commitNew;
+        return this;
+    }
+
     public String getCommitUrl() {
-        return format("https://github.com/{0}/commit/{1}#diff-{2}{3}{4}",
+        if (commitNew.isEmpty()) {
+            return format("https://github.com/{0}/commit/{1}#diff-{2}{3}{4}",
+                    projectName.replace('.', '/'),
+                    commit,
+                    sha256Hex(getFileNameNew()),
+                    codeChangeOld.equals("_") ? "R" : "L",
+                    codeChangeOld.equals("_") ? Integer.toString(lineNew) : Integer.toString(lineOld));
+        }
+
+        return format("https://github.com/{0}/compare/{1}..{2}#diff-{3}{4}{5}",
                 projectName.replace('.', '/'),
                 commit,
+                commitNew,
                 sha256Hex(getFileNameNew()),
                 codeChangeOld.equals("_") ? "R" : "L",
                 codeChangeOld.equals("_") ? Integer.toString(lineNew) : Integer.toString(lineOld));

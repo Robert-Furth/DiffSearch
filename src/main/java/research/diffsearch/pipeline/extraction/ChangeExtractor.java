@@ -28,6 +28,7 @@ public class ChangeExtractor implements Pipeline<File, File>, ProgrammingLanguag
 
     // parsing properties
     private String commit;
+    private String commitNew;
     private String position;
     private int lineOld = 0;
     private int lineNew = 0;
@@ -102,6 +103,12 @@ public class ChangeExtractor implements Pipeline<File, File>, ProgrammingLanguag
 
         if (isCommitLine(line)) {
             commit = getCommit(line);
+            commitNew = "";
+
+        } else if (isCompareLine(line)) {
+            var parts = getCompare(line);
+            commit = parts[0];
+            commitNew = parts[1];
 
         } else if (isOldFileNameLine(line)) {
             fileNameOld = getOldFileName(line);
@@ -194,6 +201,14 @@ public class ChangeExtractor implements Pipeline<File, File>, ProgrammingLanguag
         return line.length() > 7 && line.startsWith("commit ");
     }
 
+    private static String[] getCompare(String line) {
+        return line.replace("compare ", "").trim().split(" ");
+    }
+
+    private static boolean isCompareLine(String line) {
+        return line.matches("^compare \\w+ \\w+");
+    }
+
     private int errors = 0;
 
     private void makeNewCodeChange() {
@@ -202,6 +217,7 @@ public class ChangeExtractor implements Pipeline<File, File>, ProgrammingLanguag
         codeChange.setProjectName(projectName);
         codeChange.setCommitLines(position);
         codeChange.setCommit(commit);
+        codeChange.setCommitNew(commitNew);
         if (!fileNameNew.equals(fileNameOld)) {
             codeChange.setFileNameNew(fileNameNew);
         }
