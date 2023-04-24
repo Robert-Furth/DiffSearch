@@ -35,6 +35,10 @@ public class DatasetCreationMode extends App {
                 .executeIgnoreResults(List.of(Objects.requireNonNull(
                         absPath.toFile().listFiles(File::isDirectory))));
 
+        extractAndSaveChanges();
+    }
+
+    public static void extractAndSaveChanges() {
         Pipeline.<File, File>from(file -> new ChangeExtractor(new File(Config.repositoryPath), Config.PROGRAMMING_LANGUAGE)
                         .extractCodeChangesToFile(file))
                 //.parallelUntilHere(Config.threadCount)

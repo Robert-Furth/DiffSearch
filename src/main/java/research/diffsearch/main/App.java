@@ -100,6 +100,8 @@ public abstract class App implements Runnable, Closeable {
             app = new DatasetCreationMode();
         } else if (Mode.ABSTRACT_QUERY) {
             app = new AbstractQueryMode();
+        } else if (Mode.BUGSWARM_DATASET_CREATION) {
+            app = new BugSwarmMode();
         }
         return app;
     }

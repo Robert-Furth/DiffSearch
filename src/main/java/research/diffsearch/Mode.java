@@ -45,4 +45,5 @@ public class Mode {
     public static boolean GIT_CLONE = false;
 
     public static boolean EFFECTIVENESS = false;
+    public static boolean BUGSWARM_DATASET_CREATION = false;
 }

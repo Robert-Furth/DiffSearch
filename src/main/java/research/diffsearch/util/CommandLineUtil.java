@@ -71,7 +71,8 @@ public class CommandLineUtil {
                         .optionalArg(true)
                         .numberOfArgs(1)
                         .desc("Clone a list of repositories")
-                        .build());
+                        .build())
+                .addOption("bd", "bugswarm-dataset", false, "Extract code changes from BugSwarm");
     }
 
     public static void parseArgs(String[] args) {
@@ -102,6 +103,7 @@ public class CommandLineUtil {
             Mode.EFFECTIVENESS = commandLine.hasOption("effectiveness");
             Mode.QUERYRESULT = commandLine.hasOption("relation");
             Mode.ABSTRACT_QUERY = commandLine.hasOption("abstract");
+            Mode.BUGSWARM_DATASET_CREATION = commandLine.hasOption("bd");
 
             if (commandLine.hasOption("a")) {
                 Config.query = commandLine.getOptionValue("a");
