@@ -197,4 +197,5 @@ public class Config {
 
     public static double FAISS_scalability_time = 0;
 
+    public static String bugswarm_artifact_path = "";
 }

@@ -72,7 +72,13 @@ public class CommandLineUtil {
                         .numberOfArgs(1)
                         .desc("Clone a list of repositories")
                         .build())
-                .addOption("bd", "bugswarm-dataset", false, "Extract code changes from BugSwarm");
+                .addOption(Option.builder("bd")
+                        .longOpt("bugswarm-dataset")
+                        .optionalArg(true)
+                        .numberOfArgs(1)
+                        .argName("artifact-file")
+                        .desc("Extract code changes from BugSwarm")
+                        .build());
     }
 
     public static void parseArgs(String[] args) {
@@ -103,7 +109,6 @@ public class CommandLineUtil {
             Mode.EFFECTIVENESS = commandLine.hasOption("effectiveness");
             Mode.QUERYRESULT = commandLine.hasOption("relation");
             Mode.ABSTRACT_QUERY = commandLine.hasOption("abstract");
-            Mode.BUGSWARM_DATASET_CREATION = commandLine.hasOption("bd");
 
             if (commandLine.hasOption("a")) {
                 Config.query = commandLine.getOptionValue("a");
@@ -182,6 +187,10 @@ public class CommandLineUtil {
                 if (path != null && !path.isBlank()) {
                     Config.listOfRepositoriesPath = path;
                 }
+            }
+            if (commandLine.hasOption("bd")) {
+                Mode.BUGSWARM_DATASET_CREATION = true;
+                Config.bugswarm_artifact_path = commandLine.getOptionValue("bd", "");
             }
         } catch (ParseException | NumberFormatException exception) {
             logger.error(exception.getMessage());

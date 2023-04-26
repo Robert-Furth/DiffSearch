@@ -23,11 +23,14 @@ public class BugSwarmMode extends App {
              * - Programming language suffix
              * - Number of threads
              */
+
+            String mode = Config.bugswarm_artifact_path.isEmpty() ? "buildpairs" : "artifacts";
             var runner = new PythonRunner(
                     "./src/main/resources/Python/bugswarm_gen_patches.py",
                     absPath.toString(),
                     Config.PROGRAMMING_LANGUAGE.getSuffix(),
-                    Integer.toString(Config.threadCount));
+                    mode,
+                    Config.bugswarm_artifact_path);
             runner.runAndWaitUntilEnd();
 
             DatasetCreationMode.extractAndSaveChanges();
