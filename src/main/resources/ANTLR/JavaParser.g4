@@ -681,7 +681,8 @@ typeList
     ;
 
 typeType
-    : annotation? (classOrInterfaceType | primitiveType) ('[' ']')*
+    : TYPE
+    | annotation? (classOrInterfaceType | primitiveType) ('[' ']')*
     ;
 
 primitiveType

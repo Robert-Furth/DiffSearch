@@ -24,7 +24,8 @@ public class NodeUtil {
     }
 
     // TODO: get this from the grammar or some other place
-    private static Set<String> placeholderNames = new HashSet<>(Arrays.asList("LT", "ID", "binOP", "OP", "unOP", "EXPR"));
+    private static Set<String> placeholderNames = new HashSet<>(
+            Arrays.asList("LT", "ID", "binOP", "OP", "unOP", "EXPR", "TYPE"));
 
     public enum Kind {
         UNNAMED_PLACEHOLDER, NAMED_PLACEHOLDER, NORMAL, WILDCARD, EMPTY
@@ -96,6 +97,10 @@ public class NodeUtil {
                    || vParentText.equals("expr")
                    || vParentText.equals("methodCall")
                    || vParentText.equals("singleExpression");
+        } else if (kText.equals("TYPE") || kText.matches("TYPE<[0-9]+>")) {
+            return vText.equals("typeType")
+                    || vText.equals("classOrInterfaceType")
+                    || vText.equals("primitiveType");
         }
         throw new IllegalArgumentException("Unexpected node label " + kText);
     }

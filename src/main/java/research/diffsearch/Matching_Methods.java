@@ -245,6 +245,28 @@ public class Matching_Methods {
                         }
                     }
 
+                case "TYPE<0>":
+                case "TYPE<1>":
+                case "TYPE<2>":
+                    for (int j = 0; j < array_query_new_nodes.length; j++) {
+                        if (array_query_new_nodes[j].equals(array_query_old_nodes[i])) {
+                            if (!array_change_old_nodes[i].equals(array_change_new_nodes[j])) {
+                                return false;
+                            }
+                        }
+                    }
+
+                    if (!array_query_new_nodes[i].equals(array_query_old_nodes[i])) {
+                        if (array_change_old_nodes[i].equals(array_change_new_nodes[i])) {
+                            return false;
+                        }
+                    } else {
+                        if (!array_change_old_nodes[i].equals(array_change_new_nodes[i])) {
+                            return false;
+                        }
+                    }
+                    break;
+
                 case "EXPR": case "EXPR<0>": case "EXPR<1>": case "EXPR<2>": case "<...>":
 
                     try {

@@ -89,6 +89,8 @@ EMPTY: '_'; //MOD
 
 WILDCARD: '<...>'; //MOD
 
+TYPE: 'TYPE<0>' | 'TYPE<1>' | 'TYPE<2>' | 'TYPE<3>' | 'TYPE'; //MOD
+
 NEWLINE: '\r'? '\n' | '\r' | '\f';//MOD
 
 // Literals

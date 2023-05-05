@@ -208,7 +208,7 @@ public class Util {
     }
 
     public static boolean isQueryPlaceholder(String nodeText) {
-        var keywords = List.of("ID", "EXPR", "binOP", "unOP", "OP", "LT", "<...>", "querySnippet");
+        var keywords = List.of("ID", "EXPR", "binOP", "unOP", "OP", "LT", "<...>", "querySnippet", "TYPE");
         return keywords
                 .stream()
                 .anyMatch(nodeText::contains);
