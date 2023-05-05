@@ -17,12 +17,7 @@ public class BugSwarmMode extends App {
         logger.info("Generating patches...");
 
         try {
-            /*
-             * Runner args:
-             * - Path to repositories
-             * - Programming language suffix
-             * - Number of threads
-             */
+            DatasetCreationMode.extractCommitLogs();
 
             String mode = Config.bugswarm_artifact_path.isEmpty() ? "buildpairs" : "artifacts";
             var runner = new PythonRunner(

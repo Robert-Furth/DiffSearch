@@ -75,7 +75,7 @@ def process_repo(repo: str, repo_dir: str, shas: 'set[tuple[str, str]]', lang_su
     logger.info(f'{repo}: Generated {len(patches)} patches from {len(shas)} build pairs.')
 
     logger.info(f'{repo}: Writing patch file to {patch_path}...')
-    with open(patch_path, 'w') as f:
+    with open(patch_path, 'a') as f:
         chars_written = f.write('\n\n'.join(patches) + '\n')
     logger.info(f'{repo}: Wrote {chars_written} characters to {patch_path}.')
     logger.info(f'{repo}: Finished!')

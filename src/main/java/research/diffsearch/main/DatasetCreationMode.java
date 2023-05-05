@@ -25,7 +25,11 @@ public class DatasetCreationMode extends App {
 
     @Override
     public void run() {
+        extractCommitLogs();
+        extractAndSaveChanges();
+    }
 
+    public static void extractCommitLogs() {
         var absPath = Paths.get(Config.repositoryPath).toAbsolutePath().normalize();
 
         logger.info("Extracting commit logs...");
