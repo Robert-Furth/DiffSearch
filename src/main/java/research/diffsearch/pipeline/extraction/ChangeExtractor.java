@@ -175,19 +175,19 @@ public class ChangeExtractor implements Pipeline<File, File>, ProgrammingLanguag
     }
 
     private static boolean isNewFileLine(String line) {
-        return line.startsWith("+++ b/");
+        return line.startsWith("+++ b/") || line.startsWith("+++ /dev/null");
     }
 
     private static String getNewFileName(String line) {
-        return line.replace("+++ b/", "").trim();
+        return line.replaceFirst("^\\+\\+\\+ (b/)?", "").trim();
     }
 
     private static String getOldFileName(String line) {
-        return line.replace("--- a/", "").trim();
+        return line.replaceFirst("^--- (a/)?", "").trim();
     }
 
     private static boolean isOldFileNameLine(String line) {
-        return line.startsWith("--- a/");
+        return line.startsWith("--- a/") || line.startsWith("--- /dev/null");
     }
 
     private static String getCommit(String line) {
