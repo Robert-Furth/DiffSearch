@@ -560,7 +560,7 @@ expression
     | expression postfix=unary_postfix_operators    // | 'unOP<0>' | 'unOP<1>' | 'unOP<2>' | 'unOP<3>')
     | prefix=unary_prefix_operators expression // | 'unOP<0>' | 'unOP<1>' | 'unOP<2>' | 'unOP<3>') expression
     //| prefix=('~'|'!') expression
-    | expression binary_operators expression
+    | <assoc=right> expression binary_operators expression
     //| expression bop=('*'|'/'|'%') expression
     //| expression bop=('+'|'-') expression
     //| expression ('<' '<' | '>' '>' '>' | '>' '>') expression
